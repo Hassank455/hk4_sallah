@@ -82,7 +82,10 @@ class _ItemDetailsState extends State<ItemDetails> {
               onTap: () {
                 showGeneralDialog(
                     context: context,
-                    pageBuilder: (context, anim1, anim2) {},
+                    pageBuilder: (context, anim1, anim2){
+                      return const AlertDialog(title: Text('Alert!'));
+                      //###############################################
+                    },
                     barrierLabel: '',
                     barrierDismissible: true,
                     transitionDuration: Duration(milliseconds: 300),

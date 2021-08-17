@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hk4_sallah/model/address/address_model.dart';
+import 'package:hk4_sallah/shared/components/components.dart';
+import 'package:hk4_sallah/shared/network/local/salla_States.dart';
 
 import '../cubit.dart';
 import '../setting_state.dart';
+import 'address_details.dart';
 
 class AddressScreen extends StatefulWidget {
   static const String ADDRESS_SCREEN = 'address_screen';
@@ -14,24 +18,24 @@ class AddressScreen extends StatefulWidget {
 }
 
 class _AddressScreenState extends State<AddressScreen> {
-  SettingCubit cubit;
+  SettingCubit? cubit;
 
   @override
   void initState() {
     super.initState();
     cubit = SettingCubit.get(context);
-    cubit.getCurrentAddressForUser();
+    cubit!.getCurrentAddressForUser();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<AllAddressData> addressDetails;
+    List<AllAddressData>? addressDetails;
     return Scaffold(
       appBar: AppBar(),
       body: BlocConsumer<SettingCubit, SallaStates>(
         listener: (context, state) {
           if (state is SuccessGetAddressState) {
-            addressDetails = SettingCubit.get(context).addressGroup.data.data;
+            addressDetails = SettingCubit.get(context).addressGroup!.data!.data;
           }
         },
         builder: (context, state) {
@@ -72,16 +76,16 @@ class _AddressScreenState extends State<AddressScreen> {
                           onDismissed: (DismissDirection direction) {
                             switch (direction) {
                               case DismissDirection.endToStart:
-                                cubit.deleteAddressForUser(
-                                    id: addressDetails[index].id,
-                                    address: addressDetails[index],
+                                cubit!.deleteAddressForUser(
+                                    id: addressDetails![index].id,
+                                    address: addressDetails![index],
                                     index: index);
                                 break;
                               case DismissDirection.startToEnd:
                                 pushInStack(
                                     context, AddressDetails.ADDRESS_DETAILS,
-                                    arg: addressDetails[index]);
-                                cubit.changeEditState(isEditing: true);
+                                    arg: addressDetails![index]);
+                                cubit!.changeEditState(isEditing: true);
                                 break;
                             }
                           },
@@ -91,7 +95,7 @@ class _AddressScreenState extends State<AddressScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Icon(
-                                  addressDetails[index].name.toLowerCase() ==
+                                  addressDetails![index].name!.toLowerCase() ==
                                           'home'
                                       ? Icons.home_outlined
                                       : Icons.work_outline,
@@ -114,18 +118,18 @@ class _AddressScreenState extends State<AddressScreen> {
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Text(
-                                        addressDetails[index].name,
+                                        addressDetails![index].name!,
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline6
-                                            .copyWith(
+                                            !.copyWith(
                                               color: Colors.teal,
                                             ),
                                       ),
                                       Text(
-                                        '${addressDetails[index].city}, '
-                                        '${addressDetails[index].region}, '
-                                        '${addressDetails[index].details} ',
+                                        '${addressDetails![index].city}, '
+                                        '${addressDetails![index].region}, '
+                                        '${addressDetails![index].details} ',
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(color: Colors.grey),
                                       ),
@@ -138,7 +142,7 @@ class _AddressScreenState extends State<AddressScreen> {
                         ),
                       );
                     },
-                    itemCount: cubit.addressGroup.data.data.length,
+                    itemCount: cubit!.addressGroup!.data!.data.length,
                   ),
                 )
               : Center(child: CircularProgressIndicator());
@@ -151,7 +155,7 @@ class _AddressScreenState extends State<AddressScreen> {
         ),
         onPressed: () {
           pushInStack(context, AddressDetails.ADDRESS_DETAILS);
-          cubit.changeEditState(isEditing: false);
+          cubit!.changeEditState(isEditing: false);
         },
       ),
     );

@@ -2,15 +2,17 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hk4_sallah/model/user_model.dart';
+import 'package:hk4_sallah/modules/settings/setting_state.dart';
+import 'package:hk4_sallah/shared/components/components.dart';
+import 'package:hk4_sallah/shared/network/local/salla_States.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:salla/model/user_model.dart';
-import 'package:salla/modules/settings/cubit.dart';
-import 'package:salla/modules/settings/setting_state.dart';
-import 'package:salla/shared/component/components.dart';
-import 'package:salla/shared/network/local/salla_States.dart';
+
+import 'cubit.dart';
+
 
 class ProfileInformation extends StatefulWidget {
-  const ProfileInformation({Key key}) : super(key: key);
+  const ProfileInformation({Key? key}) : super(key: key);
 
   @override
   _ProfileInformationState createState() => _ProfileInformationState();
@@ -33,8 +35,8 @@ class _ProfileInformationState extends State<ProfileInformation> {
 
   @override
   Widget build(BuildContext context) {
-    UserDataLogin userInfoModel;
-    UserModel userModel;
+    UserDataLogin? userInfoModel;
+    UserModel? userModel;
 
     return Form(
       key: formState,
@@ -46,16 +48,16 @@ class _ProfileInformationState extends State<ProfileInformation> {
               if (state is SuccessSettingState ||
                   state is ChangeStateExpansionSettingState) {
                 userInfoModel = SettingCubit.get(context).userInfoModel;
-                userController.text = userInfoModel.name;
-                phoneController.text = userInfoModel.phone;
-                emailController.text = userInfoModel.email;
+                userController.text = userInfoModel!.name!;
+                phoneController.text = userInfoModel!.phone!;
+                emailController.text = userInfoModel!.email!;
               } else if (state is SuccessUpdateSettingState) {
                 // SettingCubit.get(context).getUserInfo();
                 userModel = SettingCubit.get(context).userModel;
                 if (userModel != null) {
                   Flushbar(
                     title: 'Alert!',
-                    message: userModel.message,
+                    message: userModel!.message,
                     duration: Duration(seconds: 3),
                   )..show(context);
                 }
@@ -112,7 +114,7 @@ class _ProfileInformationState extends State<ProfileInformation> {
                           child: SettingCubit.get(context).image != null
                               ? Image(
                                   image: FileImage(
-                                      SettingCubit.get(context).image),
+                                      SettingCubit.get(context).image!),
                                   width: 120,
                                   height: 120,
                                   fit: BoxFit.cover,
@@ -122,7 +124,7 @@ class _ProfileInformationState extends State<ProfileInformation> {
                                   height: 120,
                                   fit: BoxFit.cover,
                                   imageUrl: userInfoModel != null
-                                      ? userInfoModel.image
+                                      ? userInfoModel!.image!
                                       : 'https://www.pngitem.com/pimgs/m/24-248235_user-profile-avatar-login-account-fa-user-circle.png',
                                   placeholder: (context, url) => Center(
                                     child: CircularProgressIndicator(),
@@ -147,8 +149,8 @@ class _ProfileInformationState extends State<ProfileInformation> {
                     label: 'User Name',
                     controller: userController,
                     icon: Icon(Icons.account_circle_outlined),
-                    valid: (String value) {
-                      if (value.isEmpty) {
+                    valid: (value) {
+                      if (value!.isEmpty) {
                         return 'This field should not be empty';
                       }
                       return null;
@@ -162,8 +164,8 @@ class _ProfileInformationState extends State<ProfileInformation> {
                     label: 'Phone Number',
                     controller: phoneController,
                     icon: Icon(Icons.phone_android_outlined),
-                    valid: (String value) {
-                      if (value.isEmpty) {
+                    valid: ( value) {
+                      if (value!.isEmpty) {
                         return 'This field should not be empty';
                       }
                       return null;
@@ -177,8 +179,8 @@ class _ProfileInformationState extends State<ProfileInformation> {
                     label: 'Email Address',
                     controller: emailController,
                     icon: Icon(Icons.email_outlined),
-                    valid: (String value) {
-                      if (value.isEmpty) {
+                    valid: ( value) {
+                      if (value!.isEmpty) {
                         return 'This field should not be empty';
                       }
                       return null;
@@ -191,7 +193,7 @@ class _ProfileInformationState extends State<ProfileInformation> {
                   state is! LoadingUpdateSettingState
                       ? ElevatedButton(
                           onPressed: () {
-                            if (formState.currentState.validate()) {
+                            if (formState.currentState!.validate()) {
                               if (SettingCubit.get(context).base64 != null)
                                 SettingCubit.get(context).updateProfile(
                                     image: SettingCubit.get(context).base64,

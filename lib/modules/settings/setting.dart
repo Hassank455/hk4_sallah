@@ -2,16 +2,17 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:salla/model/user_model.dart';
-import 'package:salla/modules/settings/component/address_details.dart';
-import 'package:salla/modules/settings/component/address_screen.dart';
-import 'package:salla/modules/settings/cubit.dart';
-import 'package:salla/modules/settings/setting_state.dart';
-import 'package:salla/modules/sign_in/sign_in.dart';
-import 'package:salla/shared/component/components.dart';
-import 'package:salla/shared/component/constants.dart';
-import 'package:salla/shared/network/local/salla_States.dart';
-import 'package:salla/shared/network/local/storage_pref.dart';
+import 'package:hk4_sallah/model/user_model.dart';
+import 'package:hk4_sallah/modules/settings/setting_state.dart';
+import 'package:hk4_sallah/modules/sign_in/sign_in.dart';
+import 'package:hk4_sallah/shared/components/components.dart';
+import 'package:hk4_sallah/shared/components/constants.dart';
+import 'package:hk4_sallah/shared/network/local/salla_States.dart';
+import 'package:hk4_sallah/shared/network/local/storage_pref.dart';
+
+import 'component/address_screen.dart';
+import 'cubit.dart';
+
 
 class Setting extends StatelessWidget {
   static const String SETTING_SCREEN = 'setting_layout';
@@ -19,7 +20,7 @@ class Setting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // SettingCubit.get(context).getUserInfo();
-    UserDataLogin dataLogin;
+    UserDataLogin? dataLogin;
     return Scaffold(
       appBar: AppBar(
         title: Text('Salla'),
@@ -37,11 +38,11 @@ class Setting extends StatelessWidget {
         listener: (context, state) {
           if (state is SuccessUpdateSettingState) {
             // SettingCubit.get(context).getUserInfo();
-            dataLogin = SettingCubit.get(context).userInfoModel;
+            dataLogin = SettingCubit.get(context).userInfoModel!;
           }
         },
         builder: (context, state) {
-          dataLogin = SettingCubit.get(context).userInfoModel;
+          dataLogin = SettingCubit.get(context).userInfoModel!;
           return SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             child: Column(
@@ -64,7 +65,7 @@ class Setting extends StatelessWidget {
                               height: 75,
                               fit: BoxFit.cover,
                               imageUrl: dataLogin != null
-                                  ? dataLogin.image
+                                  ? dataLogin!.image!
                                   : 'https://www.pngitem.com/pimgs/m/24-248235_user-profile-avatar-login-account-fa-user-circle.png',
                               placeholder: (context, url) => Center(
                                 child: CircularProgressIndicator(),
@@ -80,8 +81,8 @@ class Setting extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Welcome, ${dataLogin.name}'),
-                            Text('${dataLogin.email}'),
+                            Text('Welcome, ${dataLogin!.name}'),
+                            Text('${dataLogin!.email}'),
                           ],
                         ),
                     ],
@@ -113,19 +114,19 @@ class Setting extends StatelessWidget {
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 8, vertical: 6),
                                   child: Text(
-                                    item.title,
+                                    item.title!,
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline6
-                                        .copyWith(
+                                        !.copyWith(
                                           color: Colors.black,
                                           fontSize: 18,
                                         ),
                                   ),
                                 );
                               },
-                              isExpanded: item.isExpanded,
-                              body: item.body,
+                              isExpanded: item.isExpanded!,
+                              body: item.body!,
                             );
                           }).toList(),
                         ),
@@ -136,7 +137,7 @@ class Setting extends StatelessWidget {
                 ListTile(
                   title: Text(
                     'Address',
-                    style: Theme.of(context).textTheme.headline6.copyWith(
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
                           color: Colors.black,
                           fontSize: 18,
                         ),

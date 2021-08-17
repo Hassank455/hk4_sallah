@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:salla/model/address/address_model.dart';
-import 'package:salla/modules/settings/component/address_screen.dart';
-import 'package:salla/modules/settings/cubit.dart';
-import 'package:salla/shared/component/components.dart';
-import 'package:salla/shared/network/local/salla_States.dart';
+import 'package:hk4_sallah/model/address/address_model.dart';
+import 'package:hk4_sallah/shared/components/components.dart';
+import 'package:hk4_sallah/shared/network/local/salla_States.dart';
 
+import '../cubit.dart';
 import '../setting_state.dart';
+import 'address_screen.dart';
 import 'component.dart';
 
 class AddressDetails extends StatefulWidget {
   static const String ADDRESS_DETAILS = 'address_details';
 
-  const AddressDetails({Key key}) : super(key: key);
+  const AddressDetails({Key? key}) : super(key: key);
 
   @override
   _AddressDetailsState createState() => _AddressDetailsState();
 }
 
 class _AddressDetailsState extends State<AddressDetails> {
-  String currentValue;
-  SettingCubit cubit;
-  AllAddressData addressDetails;
+  String? currentValue;
+  SettingCubit? cubit;
+  AllAddressData? addressDetails;
 
   TextEditingController cityController = TextEditingController();
   TextEditingController regionController = TextEditingController();
@@ -39,7 +39,7 @@ class _AddressDetailsState extends State<AddressDetails> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    addressDetails = ModalRoute.of(context).settings.arguments;
+    addressDetails = ModalRoute.of(context)!.settings.arguments as AllAddressData?;
     setValueOfController();
     // print(addressDetails.name);
   }
@@ -63,7 +63,7 @@ class _AddressDetailsState extends State<AddressDetails> {
         }
       },
       builder: (context, state) {
-        currentValue = cubit.currentElementInDropDown;
+        currentValue = cubit!.currentElementInDropDown;
         return Scaffold(
           appBar: AppBar(
             title: Text('Address'),
@@ -90,8 +90,8 @@ class _AddressDetailsState extends State<AddressDetails> {
                       label: 'City',
                       icon: Icon(Icons.location_city),
                       keyboard: TextInputType.text,
-                      valid: (String value) {
-                        if (value.isEmpty) {
+                      valid: ( value) {
+                        if (value!.isEmpty) {
                           return 'This field is required';
                         }
                         return null;
@@ -106,8 +106,8 @@ class _AddressDetailsState extends State<AddressDetails> {
                       label: 'Region',
                       icon: Icon(Icons.location_city),
                       keyboard: TextInputType.text,
-                      valid: (String value) {
-                        if (value.isEmpty) {
+                      valid: ( value) {
+                        if (value!.isEmpty) {
                           return 'This field is required';
                         }
                         return null;
@@ -123,8 +123,8 @@ class _AddressDetailsState extends State<AddressDetails> {
                       label: 'Details',
                       icon: Icon(Icons.details),
                       keyboard: TextInputType.text,
-                      valid: (String value) {
-                        if (value.isEmpty) {
+                      valid: ( value) {
+                        if (value!.isEmpty) {
                           return 'This field is required';
                         }
                         return null;
@@ -148,11 +148,11 @@ class _AddressDetailsState extends State<AddressDetails> {
                           ? buildButton(
                               title: 'Save',
                               onClick: () {
-                                if (formState.currentState.validate()) {
-                                  if (cubit.isEditing) {
-                                    cubit.updateCurrentAddressForUser(
-                                      id: addressDetails.id,
-                                      addressType: currentValue,
+                                if (formState.currentState!.validate()) {
+                                  if (cubit!.isEditing!) {
+                                    cubit!.updateCurrentAddressForUser(
+                                      id: addressDetails!.id!,
+                                      addressType: currentValue!,
                                       city: cityController.text.toString(),
                                       region: regionController.text.toString(),
                                       details:
@@ -160,8 +160,8 @@ class _AddressDetailsState extends State<AddressDetails> {
                                       notes: noteController.text.toString(),
                                     );
                                   } else {
-                                    cubit.addAddressForUser(
-                                      addressType: currentValue,
+                                    cubit!.addAddressForUser(
+                                      addressType: currentValue!,
                                       city: cityController.text.toString(),
                                       region: regionController.text.toString(),
                                       details:
@@ -185,14 +185,14 @@ class _AddressDetailsState extends State<AddressDetails> {
   }
 
   void setValueOfController() {
-    if (cubit.isEditing) {
-      cityController.text = addressDetails.city.toString();
-      regionController.text = addressDetails.region.toString();
-      detailsController.text = addressDetails.details.toString();
-      noteController.text = addressDetails.notes.toString() == 'null'
+    if (cubit!.isEditing!) {
+      cityController.text = addressDetails!.city.toString();
+      regionController.text = addressDetails!.region.toString();
+      detailsController.text = addressDetails!.details.toString();
+      noteController.text = addressDetails!.notes.toString() == 'null'
           ? ''
-          : addressDetails.notes.toString();
-      cubit.setNewDropdownElement(addressDetails.name);
+          : addressDetails!.notes.toString();
+      cubit!.setNewDropdownElement(addressDetails!.name!);
     }
   }
 }
