@@ -43,6 +43,17 @@ class _SallaBoardingState extends State<SallaBoarding> {
 
   bool seeBoard = false;
 
+ /* void submit() {
+    StoragePref.setValue(
+      key: 'onBoarding',
+      value: true,
+    ).then((value) {
+      if (value) {
+        pushAndReplace(context, SignIn.SIGN_IN_SCREEN);
+      }
+    });
+  }*/
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +64,7 @@ class _SallaBoardingState extends State<SallaBoarding> {
           TextButton(
               onPressed: () {
                 seeBoard = true;
-                StoragePref.setValue('seeBoarding', seeBoard).then(
+                StoragePref.setValue(key: 'seeBoarding',value:  seeBoard).then(
                   (value) {
                     if (value) {
                       pushAndReplace(context, SignIn.SIGN_IN_SCREEN);
@@ -112,7 +123,7 @@ class _SallaBoardingState extends State<SallaBoarding> {
                         curve: Curves.fastLinearToSlowEaseIn,
                       );
                     } else {
-                      StoragePref.setValue('seeBoarding', seeBoard)
+                      StoragePref.setValue(key: 'seeBoarding',value:  seeBoard)
                           .then((value) {
                         if (value) {
                           pushAndReplace(context, SignIn.SIGN_IN_SCREEN);

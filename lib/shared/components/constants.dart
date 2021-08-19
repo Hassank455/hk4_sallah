@@ -12,6 +12,6 @@ const String END_POINT_PRODUCT_DETAILS = 'products/';
 const String END_POINT_EDIT_ADDRESS = 'addresses/';
 const String END_POINT_ADD_ADDRESS = 'addresses';
 
-String token = '';
-String language = '';
+String? token = '';
+String? language;
 bool? isDark;

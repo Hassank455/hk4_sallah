@@ -1,13 +1,16 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hk4_sallah/layout/navigation_bar/navigation_bar.dart';
 import 'package:hk4_sallah/model/user_model.dart';
 import 'package:hk4_sallah/modules/sign_in/cubit.dart';
 import 'package:hk4_sallah/modules/sign_in/sign_in.dart';
+import 'package:hk4_sallah/modules/sign_up/cubit.dart';
 import 'package:hk4_sallah/modules/sign_up/sign_up_states.dart';
 import 'package:hk4_sallah/shared/components/components.dart';
 import 'package:hk4_sallah/shared/components/constants.dart';
 import 'package:hk4_sallah/shared/network/local/salla_States.dart';
+import 'package:hk4_sallah/shared/network/local/storage_pref.dart';
 
 class SignUp extends StatefulWidget {
   static const String SIGN_UP_SCREEN = 'sign_up';
@@ -39,10 +42,10 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     UserModel? user;
     return BlocProvider(
-      create: (BuildContext context) => LoginCubit(),
-      child: BlocConsumer<LoginCubit, SallaStates>(
+      create: (BuildContext context) => SignUpc(),
+      child: BlocConsumer<SignUpc, SallaStates>(
         listener: (context, state) {
-          user = LoginCubit.get(context).userList;
+          /*user = SignUpc.get(context).userList;
           if (state is SuccessSignUpState) {
             if (user!.status!) {
               pushAndReplace(context, SignIn.SIGN_IN_SCREEN);
@@ -55,6 +58,37 @@ class _SignUpState extends State<SignUp> {
               Flushbar(
                 title: 'Alert!',
                 message: user!.message,
+                duration: Duration(seconds: 3),
+              )..show(context);
+            }
+          }*/
+          if (state is SuccessSignUpState) {
+            if (state.userModel.status!) {
+              print(state.userModel.message);
+              print(state.userModel.dataRegister!.token);
+              print('3333333333333333333333');
+
+              StoragePref.setValue(
+                key: 'token',
+                value: state.userModel.dataRegister!.token,
+
+              ).then((value) {
+                token = state.userModel.dataRegister!.token!;
+                print('44444444444444444');
+                Navigator.pushNamedAndRemoveUntil(
+                    context, NavigationBar.NAVIGATION_BAR_SCREEN, (route) => false);
+                Flushbar(
+                  title: 'Alert!',
+                  message: state.userModel.message,
+                  duration: Duration(seconds: 3),
+                )..show(context);
+              });
+            } else {
+              print(state.userModel.message);
+
+              Flushbar(
+                title: 'Alert!',
+                message: state.userModel.message,
                 duration: Duration(seconds: 3),
               )..show(context);
             }
@@ -169,7 +203,7 @@ class _SignUpState extends State<SignUp> {
                                 ? ElevatedButton(
                                     onPressed: () {
                                       if (formKey.currentState!.validate()) {
-                                        LoginCubit.get(context).postUserLogin(
+                                        /*LoginCubit.get(context).postUserLogin(
                                           route: SignUp.SIGN_UP_SCREEN,
                                           email: _emailController.text,
                                           password: _passController.text,
@@ -177,7 +211,11 @@ class _SignUpState extends State<SignUp> {
                                           phone: _phoneController.text,
                                           url: END_POINT_SIGN_UP,
                                           context: context,
-                                        );
+                                        );*/
+                                        SignUpc.get(context).registerLogin(email: _emailController.text,
+                                            password: _passController.text,
+                                            phone: _phoneController.text,
+                                            userName: _userController.text);
                                       }
                                     },
                                     child: Text(

@@ -33,10 +33,22 @@ class LoginCubit extends Cubit<SallaStates> {
     }
   }
 
+/*  IconData suffix = Icons.visibility_outlined;
+  bool isPassword = true;
+
+  void changePasswordVisibility()
+  {
+    isPassword = !isPassword;
+    suffix = isPassword ? Icons.visibility_outlined : Icons.visibility_off_outlined ;
+
+    emit(ChangeVisibilityPasswordSignInState());
+    emit(ChangeVisibilityPasswordSignUpState());
+  }*/
+
   // بسبب مشابهة ال 2 Screen لبعضهم
   // قمنا بعمل باراميتر وهو ال route ومهمته هي
   // معرفة ال screen القادمة لل cubit ليقوم بعمل emit لل state المحدده فقط
-  void postUserLogin({
+/*  void postUserLogin({
     required BuildContext context,
     required String route,
     required String email,
@@ -60,7 +72,7 @@ class LoginCubit extends Cubit<SallaStates> {
         if (userList!.status!) {
           StoragePref.setValue('token', userList!.dataLogin!.token).then((value) {
             if (value) {
-              String key = StoragePref.getValue('token');
+              String key = StoragePref.getValue(key: 'token');
               print('Shared Pref: ---> ${key}');
             }
           });
@@ -73,7 +85,7 @@ class LoginCubit extends Cubit<SallaStates> {
         if (userList!.status!) {
           StoragePref.setValue('token', userList!.dataRegister!.token);
           token = userList!.dataRegister!.token!;
-          /*.then((value) => pushAndReplace(context, SignIn.SIGN_IN_SCREEN));*/
+          *//*.then((value) => pushAndReplace(context, SignIn.SIGN_IN_SCREEN));*//*
         }
         emit(SuccessSignUpState());
       }
@@ -84,5 +96,34 @@ class LoginCubit extends Cubit<SallaStates> {
         emit(ErrorSignUpState(error.toString()));
       print(error.toString());
     });
+  }*/
+
+  void userLogin({
+    required String email,
+    required String password,
+  })
+  {
+    emit(InitialSignInState());
+
+    SallaDioHelper.postData(
+      endPointUrl: END_POINT_SIGN_IN,
+      data:
+      {
+        'email': email,
+        'password': password,
+      },
+    ).then((value)
+    {
+      print(value.data);
+     // loginModel = ShopLoginModel.fromJson(value.data);
+      userList = UserModel.fromJsonLogin(value.data);
+      emit(SuccessSignInState(userList!));
+    }).catchError((error)
+    {
+      print(error.toString());
+      emit(ErrorSignInState(error.toString()));
+    });
   }
+
+
 }

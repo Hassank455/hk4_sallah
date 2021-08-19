@@ -7,11 +7,11 @@ class StoragePref {
     _preferences = await SharedPreferences.getInstance();
   }
 
-  static dynamic getValue(String key) {
+  static dynamic getValue({required String key}) {
     return _preferences!.get(key);
   }
 
-  static Future<bool> setValue(String key, var value) async {
+  static Future<bool> setValue({required String key,required var value}) async {
     switch (value.runtimeType) {
       case String:
         return await _preferences!.setString(key, value);

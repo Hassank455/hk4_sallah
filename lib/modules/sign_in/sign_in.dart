@@ -8,6 +8,7 @@ import 'package:hk4_sallah/modules/sign_up/sign_up.dart';
 import 'package:hk4_sallah/shared/components/components.dart';
 import 'package:hk4_sallah/shared/components/constants.dart';
 import 'package:hk4_sallah/shared/network/local/salla_States.dart';
+import 'package:hk4_sallah/shared/network/local/storage_pref.dart';
 import 'package:hk4_sallah/shared/style/colors.dart';
 
 import 'cubit.dart';
@@ -41,7 +42,7 @@ class _SignInState extends State<SignIn> {
     var currentState;
     return BlocConsumer<LoginCubit, SallaStates>(
       listener: (context, state) {
-        currentState = state;
+        /*currentState = state;
         user = LoginCubit.get(context).userList;
         if (state is SuccessSignInState) {
           if (user!.status!) {
@@ -53,6 +54,35 @@ class _SignInState extends State<SignIn> {
               duration: Duration(seconds: 3),
             )..show(context);
           } else {
+            Flushbar(
+              title: 'Alert!',
+              message: user!.message,
+              duration: Duration(seconds: 3),
+            )..show(context);
+          }
+        }*/
+        if (state is SuccessSignInState) {
+          if (state.userModel.status!) {
+            print(state.userModel.message);
+            print(state.userModel.dataLogin!.token);
+
+            StoragePref.setValue(
+              key: 'token',
+              value: state.userModel.dataLogin!.token,
+            ).then((value) {
+              token = state.userModel.dataLogin!.token!;
+
+              Navigator.pushNamedAndRemoveUntil(
+                  context, NavigationBar.NAVIGATION_BAR_SCREEN, (route) => false);
+              Flushbar(
+                title: 'Alert!',
+                message: user!.message,
+                duration: Duration(seconds: 3),
+              )..show(context);
+            });
+          } else {
+            print(state.userModel.message);
+
             Flushbar(
               title: 'Alert!',
               message: user!.message,
@@ -118,7 +148,7 @@ class _SignInState extends State<SignIn> {
                             icon: LoginCubit.get(context).icon,
                             onPressed: () {
                               LoginCubit.get(context)
-                                  .changeVisibilityIcon(currentState);
+                                  .changeVisibilityIcon(currentState!);
                             },
                           ),
                         ),
@@ -132,12 +162,15 @@ class _SignInState extends State<SignIn> {
                               ? ElevatedButton(
                                   onPressed: () async {
                                     if (formKey.currentState!.validate()) {
-                                      LoginCubit.get(context).postUserLogin(
+                                      /*LoginCubit.get(context).postUserLogin(
                                           route: SignIn.SIGN_IN_SCREEN,
                                           email: _userController.text,
                                           password: _passController.text,
                                           url: END_POINT_SIGN_IN,
-                                          context: context);
+                                          context: context);*/
+                                      LoginCubit.get(context).userLogin(email: _userController.text,
+                                        password: _passController.text,);
+
                                       print(
                                           '${_userController.text}\n ${_passController.text}');
                                     }

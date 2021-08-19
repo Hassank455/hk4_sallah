@@ -23,7 +23,7 @@ class SallaDioHelper {
     _dio!.options.headers = {
       'Content-Type': 'application/json',
       'lang': language,
-      'Authorization': token,
+      'Authorization': token ?? '',
     };
     return await _dio!.get(
       endPointUrl,
@@ -41,7 +41,7 @@ class SallaDioHelper {
     _dio!.options.headers = {
       'Content-Type': 'application/json',
       'lang': language,
-      'Authorization': token,
+      'Authorization': token ?? '',
     };
     return await _dio!.post(
       endPointUrl,
@@ -59,7 +59,7 @@ class SallaDioHelper {
     _dio!.options.headers = {
       'Content-Type': 'application/json',
       'lang': language,
-      'Authorization': token,
+      'Authorization': token ?? '',
     };
     return await _dio!.put(
       endPointUrl,
@@ -74,7 +74,7 @@ class SallaDioHelper {
     _dio!.options.headers = {
       'Content-Type': 'application/json',
       'lang': language,
-      'Authorization': token,
+      'Authorization': token ?? '',
     };
     return await _dio!.delete(
       endPointUrl,

@@ -42,7 +42,7 @@ class Setting extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          dataLogin = SettingCubit.get(context).userInfoModel!;
+         // dataLogin = SettingCubit.get(context).userInfoModel!;
           return SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             child: Column(
@@ -171,7 +171,7 @@ Widget itemLang() {
             return OutlinedButton(
               onPressed: () {
                 language = 'en';
-                StoragePref.setValue('lang', language).then((value) {
+                StoragePref.setValue(key: 'lang',value:  language).then((value) {
                   if (value) {
                     AwesomeDialog(
                       context: context,
@@ -202,7 +202,7 @@ Widget itemLang() {
             return OutlinedButton(
               onPressed: () {
                 language = 'ar';
-                StoragePref.setValue('lang', language).then((value) {
+                StoragePref.setValue(key: 'lang',value:  language).then((value) {
                   if (value) {
                     AwesomeDialog(
                       context: context,
@@ -244,7 +244,7 @@ Widget itemTheme() {
             return OutlinedButton(
               onPressed: () {
                 isDark = true;
-                StoragePref.setValue('isDark', isDark).then((value) {
+                StoragePref.setValue(key: 'isDark',value: isDark).then((value) {
                   if (value) {
                     AwesomeDialog(
                       context: context,
@@ -280,7 +280,7 @@ Widget itemTheme() {
             return OutlinedButton(
               onPressed: () {
                 isDark = false;
-                StoragePref.setValue('isDark', isDark).then((value) {
+                StoragePref.setValue(key: 'isDark',value: isDark ).then((value) {
                   if (value) {
                     AwesomeDialog(
                       context: context,
