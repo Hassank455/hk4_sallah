@@ -66,7 +66,6 @@ class _SignUpState extends State<SignUp> {
             if (state.userModel.status!) {
               print(state.userModel.message);
               print(state.userModel.dataRegister!.token);
-              print('3333333333333333333333');
 
               StoragePref.setValue(
                 key: 'token',
@@ -74,7 +73,6 @@ class _SignUpState extends State<SignUp> {
 
               ).then((value) {
                 token = state.userModel.dataRegister!.token!;
-                print('44444444444444444');
                 Navigator.pushNamedAndRemoveUntil(
                     context, NavigationBar.NAVIGATION_BAR_SCREEN, (route) => false);
                 Flushbar(

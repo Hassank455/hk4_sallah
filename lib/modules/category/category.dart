@@ -24,8 +24,8 @@ class Category extends StatelessWidget {
     return BlocConsumer<ProductCubit, SallaStates>(
       listener: (BuildContext context, state) {
         if (state is LoadingCategoryDetailsState) {
-          CategoryDetailsModel category =
-              ProductCubit.get(context).categoryDetails!;
+          CategoryDetailsModel? category =
+              ProductCubit.get(context).categoryDetails;
           Navigator.push(
             context,
             MaterialPageRoute(
